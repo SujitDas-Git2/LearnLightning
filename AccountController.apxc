@@ -1,0 +1,48 @@
+/*  Author         :    Sujit Das (Accenture IDC)
+    Name           :    AccountController
+    Description    :    This is the controller for CreateAccount lightning component
+                        
+*/
+public class AccountController {
+	
+    /* Name        :    upsertAccount
+     * Description :    It upserts the Account record.
+     * Parameter   :    Account newAcc
+     * Returns     :    Boolean
+     */
+     @AuraEnabled
+    public static Boolean upsertAccount(Account newAcc)
+    {   
+        Boolean isAccUpserted = false;
+        System.debug('---newAcc---'+newAcc);
+        try{
+            if(String.isNotBlank(newAcc.Name)){
+            	upsert newAcc;
+            	isAccUpserted = true;                
+            }
+        }
+        catch(Exception exp){
+            System.debug('Exception message from upsertAccount() method : '+exp.getMessage());
+        }
+        return isAccUpserted;
+    }
+    
+    /* Name        :    getAccDetails
+     * Description :    It queries all the Account record and returns List of Account.
+     * Parameter   :    NA
+     * Returns     :    List<Account>
+     */
+     @AuraEnabled
+    public static List<Account> getAccDetails(Account newAcc)
+    {   
+        List<Account> accList = new List<Account>();
+        try{
+            accList = [SELECT Name, AccountNumber, Phone FROM Account LIMIT 10];
+        }
+        catch(Exception exp){
+            System.debug('Exception message from getAccDetails() method : '+exp.getMessage());
+        }
+        return accList;
+    }    
+    
+}
