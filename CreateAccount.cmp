@@ -21,7 +21,7 @@
                 <div class="slds-col slds-has-flexi-truncate">                    
                     <div class="slds-media">
                         <div class="slds-media__body">
-                            <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle" title="FormCreation">Account Creation</h1>                                
+                            <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle" title="AccCreation">Account Creation</h1>                                
                         </div>                        
                     </div>                    
                 </div>                
