@@ -8,6 +8,9 @@
     var accId = '{!Account.Id}';
     var accName = '{!Account.Name}';
     
+    <!-- Since I have used Account as the standardController hence I can access all the fields of Account without any SOQL -->
+    <!-- We can also fetch any custom object/field in the same way just make sure you are using the correct standardController -->
+    
     if ( (typeof window.sforce != 'undefined') && (window.sforce!=null) ) {
         sforce.one.navigateToURL('/apex/AccLaunchVFPage?id='+accId +'&Name=' + accName);
     }
