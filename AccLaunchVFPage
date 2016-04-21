@@ -18,7 +18,7 @@
           "nameAttribute" : accName
           },
           
-          <!-- IdAttribute is the aura attribute used in the Lightning component -->
+          <!-- IdAttribute is the aura attribute used in the MyLightningComponent -->
           
           "lightning",
           
