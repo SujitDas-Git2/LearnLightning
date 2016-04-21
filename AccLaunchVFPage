@@ -1,0 +1,31 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" standardController="Account">
+   
+    <script src="/soap/ajax/32.0/connection.js" type="text/javascript"/>
+    <script src="/soap/ajax/32.0/apex.js" type="text/javascript"/>
+
+    <apex:includeScript value="/lightning/lightning.out.js" />
+
+    <div id="lightning" />
+    <script>
+        
+        var accId = "{!$CurrentPage.parameters.id}";
+        var accName = "{!$CurrentPage.parameters.Name}";
+
+        $Lightning.use("c:MyLightningApp", function() {
+      
+          $Lightning.createComponent("c:MyLightningComponent",
+          {"IdAttribute" : accId,
+          "nameAttribute" : accName
+          },
+          
+          <!-- IdAttribute is the aura attribute used in the Lightning component -->
+          
+          "lightning",
+          
+          function(cmp) {
+            // do some stuff
+          });
+        });
+        
+    </script>
+</apex:page>
