@@ -1,0 +1,20 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" standardController="Account">
+  
+  <apex:includeScript value="/lightning/lightning.out.js" />
+
+  <div id="lightning" />
+  <script>
+      
+    var accId = '{!Account.Id}';
+    var accName = '{!Account.Name}';
+    
+    if ( (typeof window.sforce != 'undefined') && (window.sforce!=null) ) {
+        sforce.one.navigateToURL('/apex/AccLaunchVFPage?id='+accId +'&Name=' + accName);
+    }
+    else {
+        window.open('/apex/AccLaunchVFPage?id='+accId +'&Name=' + accName);
+    }    
+      
+  </script>
+  
+</apex:page>
