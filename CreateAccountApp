@@ -1,0 +1,5 @@
+<aura:application implements="flexipage:availableForAllPageTypes,force:appHostable" access="GLOBAL" extends="ltng:outApp">>
+    <!-- You must use access="GLOBAL" and extends="ltng:outApp" in the application -->
+    <!--"CreateAccount" is the Lightning Component which we have created in the previous blog -->
+    <aura:dependency resource="c:CreateAccount"/>
+</aura:application>
