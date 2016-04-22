@@ -1,0 +1,26 @@
+<apex:page standardController="Contact" recordSetVar="contacts" sidebar="true" showHeader="true" >
+    
+    <!-- Embedding the Lightning Component -->
+    <apex:includeLightning />
+    <script>
+        <!--"CreateAccountApp" is the Lightning App and "CreateAccount" is the Lightning Component -->
+        $Lightning.use("c:CreateAccountApp", function() {
+          $Lightning.createComponent("c:CreateAccount",
+          { label : "" },
+          "lightning",
+          function(cmp) {
+            // do some stuff
+          });
+        });
+    </script>
+    <!-- Embedding the Lightning Component -->
+    
+    <body>
+        <apex:pageBlock>
+             <apex:outputText value="Lightning Component in a VF page"></apex:outputText>
+             
+             <!-- Place this div wherever you want to display the Lightning Component -->
+             <div id="lightning" />
+        </apex:pageBlock>        
+    </body>
+</apex:page>
