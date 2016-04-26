@@ -1,0 +1,68 @@
+/*  Author         :    Sujit Das
+    Name           :    AccountController
+    Description    :    This is the controller for CreateAccountAdvanced lightning component
+                        
+*/
+public class AccountControllerAdvanced {
+    
+    /* Name        :    upsertAccount
+     * Description :    It upserts the Account record.
+     * Parameter   :    Account newAcc
+     * Returns     :    Boolean
+     */
+     @AuraEnabled
+    public static Boolean upsertAccount(Account newAcc)
+    {   
+        Boolean isAccUpserted = false;
+        System.debug('---newAcc---'+newAcc);
+        try{
+            if(String.isNotBlank(newAcc.Name)){
+                upsert newAcc;
+                isAccUpserted = true;                
+            }
+        }
+        catch(Exception exp){
+            System.debug('Exception message from upsertAccount() method : '+exp.getMessage());
+        }
+        return isAccUpserted;
+    }
+    
+    /* Name        :    getAccDetails
+     * Description :    It queries all the Account record and returns List of Account.
+     * Parameter   :    NA
+     * Returns     :    List<Account>
+     */
+     @AuraEnabled
+    public static List<Account> getAccDetails(Account newAcc)
+    {   
+        List<Account> accList = new List<Account>();
+        try{
+            accList = [SELECT Name, AccountNumber, Phone FROM Account LIMIT 10];
+        }
+        catch(Exception exp){
+            System.debug('Exception message from getAccDetails() method : '+exp.getMessage());
+        }
+        return accList;
+    }    
+    
+    /* Name        :    delAccountServerSide
+     * Description :    This methods deletes a Account record and returns the success/failure response.
+     * Parameter   :    Account
+     * Returns     :    Boolean
+     */
+    @AuraEnabled
+    public static boolean delAccountServerSide(Account account)
+    {   
+        Boolean isAccountDeleted = false;
+        System.debug('---account---'+account);
+        
+        try{
+            delete account;             
+            isAccountDeleted = true;            
+        }
+        catch(Exception exp){
+            System.debug('Exception message from delAccountServerSide() method : '+exp.getMessage());
+        }
+        return isAccountDeleted;
+    }
+}
