@@ -1,0 +1,178 @@
+<aura:component controller="AccountControllerAdvanced" implements="flexipage:availableForRecordHome,force:hasRecordId,force:appHostable">
+	<ltng:require styles="/resource/SLDS0122/assets/styles/salesforce-lightning-design-system-ltng.css"/>
+    
+    <!-- Account attribute -->
+    <aura:attribute name="accounts" type="Account[]" />
+    
+    <!-- New/Edit Account attributes -->
+    <aura:attribute name="newAccount" type="Account" default="{ 'sobjectType': 'Account', 'Name': '', 'AccountNumber': ''}"/>
+    <aura:attribute name="showAccModal" type="Boolean" />
+    
+    <!-- Delete Account attributes -->
+    <aura:attribute name="delAccount" type="Account" default="{ 'sobjectType': 'Account', 'Name': '', 'AccountNumber': ''}"/>
+    <aura:attribute name="showDelAccModal" type="Boolean" />
+    
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <!-- Main code body -->
+    <div class="slds">
+		<!-- Page header -->
+        <div class="slds-page-header" role="banner">
+            <div class="slds-grid ">    
+                <div class="slds-col slds-has-flexi-truncate">                    
+                    <div class="slds-media">
+                        <div class="slds-media__body">
+                            <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle" title="AccCreation">Account Creation</h1>                                
+                        </div>                        
+                    </div>                    
+                </div>                
+                <!-- Add New button -->
+                <div class="slds-button-group" role="group">
+                    <button class="slds-button slds-button--brand" onclick="{!c.showNewAccModal}">Add New Account</button>            
+                </div>
+            </div>
+        </div>
+        <!-- Page header -->
+        
+        <!-- It displays the spinner. It can be placed anywhere as per your req-->
+        <ui:spinner aura:id="spinner"/>
+        
+        <!-- This table displays the account details -->
+        <table class="slds-table slds-table--bordered slds-table--striped">
+            <thead>
+                <tr>
+                    <th >
+                        <span class="slds-truncate"><b>Actions</b></span>
+                    </th>
+                    <th scope="col"><span class="slds-truncate"><b>Account Name</b></span></th>
+                    <th scope="col"><span class="slds-truncate"><b>Account Number</b></span></th>
+                    <th scope="col"><span class="slds-truncate"><b>Phone</b></span></th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.accounts}" var="account">
+                    <tr>
+                        <td class="slds-cell-wrap"><div>
+                            <div onclick="{!c.editAccount}" data-index="{!account.Id}" style="color:#0070d2;cursor: pointer;float: left;">Edit &nbsp;<b style="color:#000000">|</b> &nbsp;</div>                
+                            <div onclick="{!c.showDelAccModal}" data-index="{!account.Id}" style="color:#0070d2;cursor: pointer;float: left;"> Delete</div>
+                            </div>
+                        </td>
+                        <td>{!account.Name}</td>
+                        <td>{!account.AccountNumber}</td>
+                        <td>{!account.Phone}</td>
+                    </tr>
+                </aura:iteration>
+            </tbody>            
+        </table>
+        <!-- This table displays the account details -->
+        
+        <!-- Add/Edit new Account Modal -->
+        <aura:renderIf isTrue="{!v.showAccModal}">
+            <span>          
+                <div>
+                    <div aria-hidden="false" role="dialog" class="slds-modal slds-modal--medium slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            
+                            <div class="slds-modal__header">
+                                <h2 class="slds-text-heading--medium">New Account</h2>                                
+                            </div>
+                            
+                            <!-- Input data -->
+                            <div class="slds-modal__content">                        
+                                <div class="container">
+                                    <form class="slds-form--stacked">                                        
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">                                
+                                                <ui:inputText aura:id="Name" label="Account Name" class="slds-input" labelClass="slds-form-element__label" value="{!v.newAccount.Name}" required="true" keyup="{!c.removeNameErr}"/>
+                                            </div>
+                                        </div>
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">                                
+                                                <ui:inputNumber aura:id="accNum" label="Account Number" class="slds-input" labelClass="slds-form-element__label" value="{!v.newAccount.AccountNumber}"/>
+                                            </div>
+                                        </div>                                        
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">                                
+                                                <ui:inputText aura:id="phone" label="Phone" class="slds-input" labelClass="slds-form-element__label" value="{!v.newAccount.Phone}" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>                                
+                            </div>
+                            <!-- Input data -->
+                            
+                            <div class="slds-modal__footer">
+                                <div class="slds-x-small-buttons--horizontal">
+                                    <button class="slds-button slds-button--neutral" data-index ="false" onclick="{!c.createNewAcc}">Save</button>
+                                    <button class="slds-button slds-button--neutral" data-index ="false" onclick="{!c.hideNewAccModal}">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-backdrop slds-backdrop--open"></div>
+                </div>
+            </span> 
+        </aura:renderIf>
+        <!-- Add/Edit new Account Modal -->
+        
+        <!-- Delete Account Modal -->
+        <aura:renderIf isTrue="{!v.showDelAccModal}">
+            <span>
+                <div>
+                    <div aria-hidden="false" role="dialog" class="slds-modal slds-modal--medium slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <div class="slds-modal__header">
+                                <h2 class="slds-text-heading--medium">Delete Account</h2>                                
+                            </div>
+                            
+                            <!-- Input data -->
+                            <div class="slds-modal__content">                        
+                                <div class="container">
+                                    <form class="slds-form--horizontal">
+                                        
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Account Name</label>
+                                            <div class="slds-form-element__control">                                
+                                                <ui:outputText aura:id="Name" title="Name" class="slds-output" value="{!v.delAccount.Name}"/>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Account Number</label>
+                                            <div class="slds-form-element__control">                                
+                                                <ui:outputText aura:id="accNum" title="Account Number" class="slds-output" value="{!v.delAccount.AccountNumber}"/>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Phone</label>
+                                            <div class="slds-form-element__control">                                
+                                                <ui:outputText aura:id="phone" title="Phone" class="slds-output" value="{!v.delAccount.Phone}"/>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+                                </div>                                
+                            </div>
+                            <!-- Input data -->
+                            
+                            <div class="slds-modal__footer">
+                                <div class="slds-x-small-buttons--horizontal">                                
+                                    <button class="slds-button slds-button--neutral" onclick="{!c.deleteAccount}">Yes</button>
+                                    <button class="slds-button slds-button--neutral" onclick="{!c.hideDelAccModal}">No</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-backdrop slds-backdrop--open"></div>
+                </div>
+            </span>
+        </aura:renderIf>
+        <!-- Delete Account Modal -->
+        
+    </div>
+    <!-- Main code body -->
+</aura:component>
